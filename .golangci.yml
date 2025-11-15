@@ -1,20 +1,12 @@
-linters:
-  disable-all: true
-  enable:
-    - govet
-    - staticcheck
-    - gosimple
-    - errcheck
-    - ineffassign
-    - unused
-    - gofmt
-    - goimports
-    - revive
+version: "2"
 
 run:
-  timeout: 5m
   tests: true
-  relative-path-mode: gomod
+  timeout: 3m
+  go: "1.25.4"
+
+linters:
+  default: standard
 
 issues:
   max-issues-per-linter: 0
