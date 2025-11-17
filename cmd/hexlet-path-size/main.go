@@ -18,5 +18,5 @@ func main() {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("%d \t %s", size, path)
+	fmt.Printf("%d\t%s\n", size, path)
 }
