@@ -27,3 +27,65 @@ func TestGetSize_NonExistentDir(t *testing.T) {
 	_, err := GetSize("testdata/nonexistent.txt")
 	assert.Error(t, err)
 }
+
+func TestFormatSize(t *testing.T) {
+	tests := []struct {
+		name  string
+		size  int64
+		human bool
+		want  string
+	}{
+		{
+			name:  "non human small",
+			size:  123,
+			human: false,
+			want:  "123B",
+		},
+		{
+			name:  "human small less than 1KB",
+			size:  512,
+			human: true,
+			want:  "512B",
+		},
+		{
+			name:  "human exactly 1KB",
+			size:  1024,
+			human: true,
+			want:  "1.0KB",
+		},
+		{
+			name:  "human exactly 1MB",
+			size:  1024 * 1024,
+			human: true,
+			want:  "1.0MB",
+		},
+		{
+			name:  "human example from task",
+			size:  1234567,
+			human: true,
+			want:  "1.2MB",
+		},
+		{
+			name:  "zero size non human",
+			size:  0,
+			human: false,
+			want:  "0B",
+		},
+		{
+			name:  "zero size human",
+			size:  0,
+			human: true,
+			want:  "0B",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := FormatSize(tt.size, tt.human)
+			if got != tt.want {
+				t.Fatalf("FormatSize(%d, %v) = %q, want %q",
+					tt.size, tt.human, got, tt.want)
+			}
+		})
+	}
+}
