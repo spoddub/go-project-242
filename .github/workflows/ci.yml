@@ -1,4 +1,4 @@
-name: CI
+name: lint & tests
 
 on:
   push:
@@ -6,12 +6,9 @@ on:
       - main
   pull_request:
 
-permissions:
-  contents: read
-
 jobs:
-  ci:
-    name: Lint
+  lint-and-test:
+    name: lint & tests
     runs-on: ubuntu-latest
 
     steps:
@@ -29,3 +26,6 @@ jobs:
         with:
           version: v2.6.2
           args: ./...
+
+      - name: Run tests
+        run: go test ./..
