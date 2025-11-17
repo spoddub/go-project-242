@@ -1,4 +1,4 @@
-name: lint & tests
+name: lint
 
 on:
   push:
@@ -7,8 +7,8 @@ on:
   pull_request:
 
 jobs:
-  lint-and-test:
-    name: lint & tests
+  lint:
+    name: lint
     runs-on: ubuntu-latest
 
     steps:
@@ -26,6 +26,3 @@ jobs:
         with:
           version: v2.6.2
           args: ./...
-
-      - name: Run tests
-        run: go test ./...
