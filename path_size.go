@@ -6,6 +6,7 @@ import (
 	"github.com/urfave/cli/v3"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 func NewApp() *cli.Command {
@@ -19,6 +20,12 @@ func NewApp() *cli.Command {
 				Aliases: []string{"H"},
 				Usage:   "human-readable sizes (auto-select unit)",
 			},
+
+			&cli.BoolFlag{
+				Name:    "all",
+				Aliases: []string{"a"},
+				Usage:   "include hidden files and directories",
+			},
 		},
 		Action: func(ctx context.Context, cmd *cli.Command) error {
 			if cmd.NArg() < 1 {
@@ -26,8 +33,9 @@ func NewApp() *cli.Command {
 			}
 
 			path := cmd.Args().Get(0)
+			all := cmd.Bool("all")
+			size, err := GetSize(path, all)
 
-			size, err := GetSize(path)
 			if err != nil {
 				return err
 			}
@@ -41,7 +49,7 @@ func NewApp() *cli.Command {
 	}
 }
 
-func GetSize(path string) (int64, error) {
+func GetSize(path string, all bool) (int64, error) {
 	info, err := os.Lstat(path)
 
 	if err != nil {
@@ -61,6 +69,11 @@ func GetSize(path string) (int64, error) {
 	var size int64
 
 	for _, entry := range entries {
+		name := entry.Name()
+
+		if !all && strings.HasSuffix(name, ".") {
+			continue
+		}
 		childPath := filepath.Join(path, entry.Name())
 		childInfo, err := os.Lstat(childPath)
 
