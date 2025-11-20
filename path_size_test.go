@@ -28,6 +28,16 @@ func TestGetSize_NonExistentDir(t *testing.T) {
 	assert.Error(t, err)
 }
 
+func TestGetSize_Dir_HiddenFilesWithAllFlag(t *testing.T) {
+	sizeWithoutHidden, err := GetSize("testdata/dir2", false)
+	assert.NoError(t, err)
+
+	sizeWithHidden, err := GetSize("testdata/dir2", true)
+	assert.NoError(t, err)
+
+	assert.Greater(t, sizeWithHidden, sizeWithoutHidden)
+}
+
 func TestFormatSize(t *testing.T) {
 	tests := []struct {
 		name  string
