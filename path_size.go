@@ -71,10 +71,10 @@ func GetSize(path string, all bool) (int64, error) {
 	for _, entry := range entries {
 		name := entry.Name()
 
-		if !all && strings.HasSuffix(name, ".") {
+		if !all && strings.HasPrefix(name, ".") {
 			continue
 		}
-		childPath := filepath.Join(path, entry.Name())
+		childPath := filepath.Join(path, name)
 		childInfo, err := os.Lstat(childPath)
 
 		if err != nil {
