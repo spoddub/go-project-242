@@ -16,20 +16,19 @@ func NewApp() *cli.Command {
 		UsageText: "hexlet-path-size [global options] <path>",
 		Flags: []cli.Flag{
 			&cli.BoolFlag{
+				Name:    "reclusive",
+				Aliases: []string{"r"},
+				Usage:   "recursive size of directories (default: false)",
+			},
+			&cli.BoolFlag{
 				Name:    "human",
 				Aliases: []string{"H"},
-				Usage:   "human-readable sizes (auto-select unit)",
+				Usage:   "human-readable sizes (auto-select unit) (default: false)",
 			},
-
 			&cli.BoolFlag{
 				Name:    "all",
 				Aliases: []string{"a"},
-				Usage:   "include hidden files and directories",
-			},
-			&cli.BoolFlag{
-				Name:    "reclusive",
-				Aliases: []string{"r"},
-				Usage:   "recursive size of directories",
+				Usage:   "include hidden files and directories (default: false)",
 			},
 		},
 		Action: func(ctx context.Context, cmd *cli.Command) error {
