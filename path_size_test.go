@@ -6,36 +6,65 @@ import (
 )
 
 func TestGetSize_File(t *testing.T) {
-	size1, err := GetSize("testdata/file1.txt", false)
+	size1, err := GetSize("testdata/file1.txt", false, false)
+
 	assert.NoError(t, err)
-	size2, err := GetSize("testdata/file2.txt", false)
+
+	size2, err := GetSize("testdata/file2.txt", false, false)
 	assert.NoError(t, err)
+
 	assert.Equal(t, size1, size2)
 }
 
-func TestGetSize_Dir(t *testing.T) {
-	size1, err := GetSize("testdata/dir1/a.txt", false)
+func TestGetSize_Dir_NonRecursive(t *testing.T) {
+	size1, err := GetSize("testdata/dir1/a.txt", false, false)
 	assert.NoError(t, err)
-	size2, err := GetSize("testdata/dir1/b.txt", false)
+
+	size2, err := GetSize("testdata/dir1/b.txt", false, false)
 	assert.NoError(t, err)
-	size3, err := GetSize("testdata/dir1", false)
+
+	size3, err := GetSize("testdata/dir1", false, false)
 	assert.NoError(t, err)
+
 	assert.Equal(t, size1+size2, size3)
 }
 
+func TestGetSize_Dir_Recursive(t *testing.T) {
+	sizePublic, err := GetSize("testdata/dir2/public_file.txt", false, false)
+	assert.NoError(t, err)
+
+	sizeNested, err := GetSize("testdata/dir2/nested", false, true)
+	assert.NoError(t, err)
+
+	sizeRecursive, err := GetSize("testdata/dir2", false, true)
+	assert.NoError(t, err)
+
+	assert.Equal(t, sizePublic+sizeNested, sizeRecursive)
+
+	sizeNonRecursive, err := GetSize("testdata/dir2", false, false)
+	assert.NoError(t, err)
+
+	assert.Equal(t, sizePublic, sizeNonRecursive)
+}
+
 func TestGetSize_NonExistentDir(t *testing.T) {
-	_, err := GetSize("testdata/nonexistent.txt", false)
+	_, err := GetSize("testdata/nonexistent.txt", false, false)
 	assert.Error(t, err)
 }
 
 func TestGetSize_Dir_HiddenFilesWithAllFlag(t *testing.T) {
-	sizeWithoutHidden, err := GetSize("testdata/dir2", false)
+	sizeWithoutHidden, err := GetSize("testdata/dir2", false, true)
 	assert.NoError(t, err)
 
-	sizeWithHidden, err := GetSize("testdata/dir2", true)
+	sizeWithHidden, err := GetSize("testdata/dir2", true, true)
 	assert.NoError(t, err)
 
 	assert.Greater(t, sizeWithHidden, sizeWithoutHidden)
+}
+
+func TestGetSize_NonExistentPath(t *testing.T) {
+	_, err := GetSize("testdata/nonexistent.txt", false, false)
+	assert.Error(t, err)
 }
 
 func TestFormatSize(t *testing.T) {
