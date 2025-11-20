@@ -6,25 +6,25 @@ import (
 )
 
 func TestGetSize_File(t *testing.T) {
-	size1, err := GetSize("testdata/file1.txt")
+	size1, err := GetSize("testdata/file1.txt", false)
 	assert.NoError(t, err)
-	size2, err := GetSize("testdata/file2.txt")
+	size2, err := GetSize("testdata/file2.txt", false)
 	assert.NoError(t, err)
 	assert.Equal(t, size1, size2)
 }
 
 func TestGetSize_Dir(t *testing.T) {
-	size1, err := GetSize("testdata/dir1/a.txt")
+	size1, err := GetSize("testdata/dir1/a.txt", false)
 	assert.NoError(t, err)
-	size2, err := GetSize("testdata/dir1/b.txt")
+	size2, err := GetSize("testdata/dir1/b.txt", false)
 	assert.NoError(t, err)
-	size3, err := GetSize("testdata/dir1")
+	size3, err := GetSize("testdata/dir1", false)
 	assert.NoError(t, err)
 	assert.Equal(t, size1+size2, size3)
 }
 
 func TestGetSize_NonExistentDir(t *testing.T) {
-	_, err := GetSize("testdata/nonexistent.txt")
+	_, err := GetSize("testdata/nonexistent.txt", false)
 	assert.Error(t, err)
 }
 
