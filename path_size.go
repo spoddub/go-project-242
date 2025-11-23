@@ -10,6 +10,7 @@ import (
 	"github.com/urfave/cli/v3"
 )
 
+// NewApp creates and configures the hexlet-path-size CLI application.
 func NewApp() *cli.Command {
 	return &cli.Command{
 		Name:      "hexlet-path-size",
@@ -53,6 +54,7 @@ func NewApp() *cli.Command {
 	}
 }
 
+// calculateSize walks the given path and returns its total size in bytes.
 func calculateSize(path string, recursive, all bool) (int64, error) {
 	info, err := os.Lstat(path)
 	if err != nil {
@@ -106,6 +108,9 @@ func calculateSize(path string, recursive, all bool) (int64, error) {
 	return size, nil
 }
 
+// GetPathSize calculates size of the given path.
+// It supports human-readable output and flags for including hidden files
+// and recursive directory traversal.
 func GetPathSize(path string, recursive, human, all bool) (string, error) {
 	size, err := calculateSize(path, recursive, all)
 	if err != nil {
@@ -115,6 +120,8 @@ func GetPathSize(path string, recursive, human, all bool) (string, error) {
 	return FormatSize(size, human), nil
 }
 
+// FormatSize converts raw size in bytes to a formatted string.
+// When human is true, it uses units B, KB, MB, GB, etc.
 func FormatSize(size int64, human bool) string {
 	if !human {
 		return fmt.Sprintf("%dB", size)
